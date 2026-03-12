@@ -155,13 +155,12 @@ export const MOCK_PRODUCTS: FarmProduct[] = [
     certificates: [{ type: CertType.VIETGAP, proofUrl: 'pdf1', issueDate: '2023-05-10', expiryDate: '2025-05-10' }],
     regionCode: 'VN-BTE-PUC-001',
     location: { lat: 10.2435, lng: 106.3756, address: 'Châu Thành, Bến Tre' },
-    status: ProductStatus.APPROVED,
+    status: ProductStatus.COMPLETED,
     statusHistory: [
       { status: ProductStatus.NEW, timestamp: '2023-10-01T08:00:00Z' },
       { status: ProductStatus.PENDING, timestamp: '2023-10-02T09:00:00Z' },
       { status: ProductStatus.REVIEWING, timestamp: '2023-10-05T10:00:00Z' },
-      { status: ProductStatus.COMPLETED, timestamp: '2023-10-10T14:00:00Z' },
-      { status: ProductStatus.APPROVED, timestamp: '2023-10-15T16:00:00Z' }
+      { status: ProductStatus.COMPLETED, timestamp: '2023-10-10T14:00:00Z' }
     ],
     contact: '0901234567',
     rating: 4.8,
@@ -191,13 +190,12 @@ export const MOCK_PRODUCTS: FarmProduct[] = [
     ],
     regionCode: 'VN-TG-01',
     location: { lat: 10.35, lng: 106.36, address: 'Cái Bè, Tiền Giang' },
-    status: ProductStatus.APPROVED,
+    status: ProductStatus.COMPLETED,
     statusHistory: [
       { status: ProductStatus.NEW, timestamp: '2024-05-10T08:00:00Z' },
       { status: ProductStatus.PENDING, timestamp: '2024-05-11T09:00:00Z' },
       { status: ProductStatus.REVIEWING, timestamp: '2024-05-15T10:00:00Z' },
-      { status: ProductStatus.COMPLETED, timestamp: '2024-05-18T14:00:00Z' },
-      { status: ProductStatus.APPROVED, timestamp: '2024-05-20T16:00:00Z' }
+      { status: ProductStatus.COMPLETED, timestamp: '2024-05-18T14:00:00Z' }
     ],
     contact: '0901234567',
     rating: 4.5,
@@ -225,13 +223,12 @@ export const MOCK_PRODUCTS: FarmProduct[] = [
     ],
     regionCode: 'VN-BT-02',
     location: { lat: 10.93, lng: 108.10, address: 'Hàm Thuận Nam, Bình Thuận' },
-    status: ProductStatus.APPROVED,
+    status: ProductStatus.COMPLETED,
     statusHistory: [
       { status: ProductStatus.NEW, timestamp: '2024-05-12T08:00:00Z' },
       { status: ProductStatus.PENDING, timestamp: '2024-05-13T09:00:00Z' },
       { status: ProductStatus.REVIEWING, timestamp: '2024-05-16T10:00:00Z' },
-      { status: ProductStatus.COMPLETED, timestamp: '2024-05-20T14:00:00Z' },
-      { status: ProductStatus.APPROVED, timestamp: '2024-05-22T16:00:00Z' }
+      { status: ProductStatus.COMPLETED, timestamp: '2024-05-20T14:00:00Z' }
     ],
     contact: '0912345678',
     rating: 4.7,
@@ -259,13 +256,12 @@ export const MOCK_PRODUCTS: FarmProduct[] = [
     ],
     regionCode: 'VN-VL-03',
     location: { lat: 10.25, lng: 105.97, address: 'Tam Bình, Vĩnh Long' },
-    status: ProductStatus.APPROVED,
+    status: ProductStatus.COMPLETED,
     statusHistory: [
       { status: ProductStatus.NEW, timestamp: '2024-05-15T08:00:00Z' },
       { status: ProductStatus.PENDING, timestamp: '2024-05-16T09:00:00Z' },
       { status: ProductStatus.REVIEWING, timestamp: '2024-05-18T10:00:00Z' },
-      { status: ProductStatus.COMPLETED, timestamp: '2024-05-22T14:00:00Z' },
-      { status: ProductStatus.APPROVED, timestamp: '2024-05-24T16:00:00Z' }
+      { status: ProductStatus.COMPLETED, timestamp: '2024-05-22T14:00:00Z' }
     ],
     contact: '0923456789',
     rating: 4.6,
@@ -293,13 +289,12 @@ export const MOCK_PRODUCTS: FarmProduct[] = [
     ],
     regionCode: 'VN-TG-04',
     location: { lat: 10.35, lng: 106.36, address: 'Cái Bè, Tiền Giang' }, // Same location as id: '2'
-    status: ProductStatus.APPROVED,
+    status: ProductStatus.COMPLETED,
     statusHistory: [
       { status: ProductStatus.NEW, timestamp: '2024-05-18T08:00:00Z' },
       { status: ProductStatus.PENDING, timestamp: '2024-05-19T09:00:00Z' },
       { status: ProductStatus.REVIEWING, timestamp: '2024-05-22T10:00:00Z' },
-      { status: ProductStatus.COMPLETED, timestamp: '2024-05-24T14:00:00Z' },
-      { status: ProductStatus.APPROVED, timestamp: '2024-05-26T16:00:00Z' }
+      { status: ProductStatus.COMPLETED, timestamp: '2024-05-24T14:00:00Z' }
     ],
     contact: '0901234567',
     rating: 4.9,

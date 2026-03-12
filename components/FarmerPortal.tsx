@@ -78,7 +78,7 @@ const FarmerPortal: React.FC<FarmerPortalProps> = ({ onAdd, existingProducts, ac
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.regionCode || formData.harvestMonths.length === 0) {
+    if (!formData.name || formData.harvestMonths.length === 0) {
       alert("Vui lòng điền đầy đủ thông tin (*) để tiếp tục.");
       return;
     }
@@ -214,15 +214,6 @@ const FarmerPortal: React.FC<FarmerPortalProps> = ({ onAdd, existingProducts, ac
               </div>
               
               <div className="space-y-8">
-                <div className="space-y-2">
-                  <label className="block text-base font-black text-black uppercase tracking-tight">Mã số vùng trồng (PUC) *</label>
-                  <input required className="w-full p-4 bg-green-50 border-2 border-green-800 rounded-2xl focus:ring-4 focus:ring-green-100 outline-none font-mono text-xl font-black text-green-900" placeholder="VN-BTE-01-02-123" value={formData.regionCode} onChange={e => setFormData({...formData, regionCode: e.target.value.toUpperCase()})} />
-                  <p className="text-sm font-bold text-red-700 flex items-center gap-2 mt-2 italic">
-                    <AlertTriangle size={16} />
-                    Dữ liệu này sẽ được hậu kiểm bởi cơ quan chuyên môn.
-                  </p>
-                </div>
-
                 <div className="space-y-4">
                   <label className="block text-base font-black text-black uppercase tracking-tight">Tải lên ảnh chụp Chứng chỉ *</label>
                   <div className="grid grid-cols-2 gap-4">
@@ -305,7 +296,7 @@ const FarmerPortal: React.FC<FarmerPortalProps> = ({ onAdd, existingProducts, ac
                         <div className="flex items-center gap-3 mb-1">
                           <h4 className="text-3xl font-black text-black uppercase tracking-tighter">{p.name}</h4>
                           <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase border-2 ${
-                            p.status === ProductStatus.APPROVED ? 'bg-green-500 text-white border-green-800 shadow-sm' : 'bg-orange-400 text-black border-orange-600 shadow-sm'
+                            p.status === ProductStatus.COMPLETED ? 'bg-green-500 text-white border-green-800 shadow-sm' : 'bg-orange-400 text-black border-orange-600 shadow-sm'
                           }`}>
                             {p.status}
                           </span>
@@ -313,7 +304,6 @@ const FarmerPortal: React.FC<FarmerPortalProps> = ({ onAdd, existingProducts, ac
                         <p className="text-lg font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
                           <MapPin size={16} /> {p.location.address} • {p.area} HA
                         </p>
-                        <p className="text-xs font-black text-slate-400 mt-2 font-mono bg-slate-50 px-3 py-1 rounded-lg border border-slate-100 inline-block">MÃ PUC: {p.regionCode}</p>
                       </div>
                     </div>
                     <button 

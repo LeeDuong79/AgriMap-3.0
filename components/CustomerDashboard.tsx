@@ -19,7 +19,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, products, o
   const [activeTab, setActiveTab] = useState<'dashboard' | 'find-supply' | 'orders' | 'traceability' | 'auction' | 'analysis'>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const approvedProducts = products.filter(p => p.status === ProductStatus.APPROVED);
+  const approvedProducts = products.filter(p => p.status === ProductStatus.COMPLETED);
 
   const stats = [
     { label: 'Nhà cung cấp', value: '128', icon: <Users className="text-blue-600" />, sub: 'Đang kết nối' },

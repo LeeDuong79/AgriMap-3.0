@@ -10,7 +10,6 @@ export enum ProductStatus {
   PENDING = 'Chờ xét duyệt',
   REVIEWING = 'Đang duyệt',
   COMPLETED = 'Xét duyệt xong',
-  APPROVED = 'Đã cấp mã PUC',
   REJECTED = 'Từ chối'
 }
 

@@ -9,17 +9,19 @@ import {
   LayoutDashboard, BookOpen, ShoppingBag, Zap,
   ShoppingCart, Package, GraduationCap, AlertTriangle,
   Landmark, Bell, User, Sun, Cloud, Thermometer,
-  ArrowLeft, Leaf, History, Globe, Maximize2, QrCode,
-  Layers, Map as MapIconLucide
+  ArrowLeft, Layers, Map as MapIconLucide
 } from 'lucide-react';
+
+import FarmProductDetail from './FarmProductDetail';
 
 interface FarmerDashboardProps {
   products: FarmProduct[];
   onViewPortal: () => void;
+  initialView?: 'dashboard' | 'records' | 'timeline';
 }
 
-const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPortal }) => {
-  const [activeView, setActiveView] = useState<'dashboard' | 'records' | 'timeline'>('dashboard');
+const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPortal, initialView = 'dashboard' }) => {
+  const [activeView, setActiveView] = useState<'dashboard' | 'records' | 'timeline'>(initialView);
   const [selectedProduct, setSelectedProduct] = useState<FarmProduct | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(products[0]?.id || null);
 
@@ -49,7 +51,7 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPorta
 
   // Logic for the old view (Records Tracking)
   const getStepData = (product: FarmProduct) => {
-    const isApproved = product.status === ProductStatus.APPROVED;
+    const isCompleted = product.status === ProductStatus.COMPLETED;
     const isPending = product.status === ProductStatus.PENDING;
     const hasNote = !!product.verificationNote;
 
@@ -58,7 +60,7 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPorta
         id: 1,
         title: 'Bước 1: Chờ xác minh',
         description: 'Hồ sơ đã được gửi thành công. Hệ thống đang đợi Cán bộ Huyện tiếp nhận và đối soát chứng từ sơ bộ.',
-        status: (isPending || isApproved || hasNote) ? 'COMPLETED' : 'CURRENT',
+        status: (isPending || isCompleted || hasNote) ? 'COMPLETED' : 'CURRENT',
         officer: 'Bộ phận Tiếp nhận - Phòng Nông nghiệp',
         date: new Date(product.updatedAt).toLocaleDateString('vi-VN')
       },
@@ -66,7 +68,7 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPorta
         id: 2,
         title: 'Bước 2: Đang xử lý',
         description: 'Cán bộ đang tiến hành xác minh thực địa hoặc kiểm tra tính pháp lý của các chứng chỉ (VietGAP/OCOP).',
-        status: isApproved ? 'COMPLETED' : (isPending && hasNote ? 'CURRENT' : (isPending ? 'WAITING' : 'WAITING')),
+        status: isCompleted ? 'COMPLETED' : (isPending && hasNote ? 'CURRENT' : (isPending ? 'WAITING' : 'WAITING')),
         officer: 'Đoàn kiểm tra liên ngành / Cán bộ kỹ thuật',
         date: hasNote ? 'Đang thực hiện' : 'Chờ xử lý'
       },
@@ -74,159 +76,15 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPorta
         id: 3,
         title: 'Bước 3: Hoàn tất',
         description: 'Chúc mừng! Hồ sơ đã được duyệt. Vùng trồng của bạn đã chính thức hiển thị công khai trên bản đồ nông sản toàn quốc.',
-        status: isApproved ? 'COMPLETED' : 'WAITING',
+        status: isCompleted ? 'COMPLETED' : 'WAITING',
         officer: 'Sở NN&PTNT / Cục Trồng trọt',
-        date: isApproved ? (product.verifiedAt ? new Date(product.verifiedAt).toLocaleDateString('vi-VN') : 'Vừa xong') : '---'
+        date: isCompleted ? (product.verifiedAt ? new Date(product.verifiedAt).toLocaleDateString('vi-VN') : 'Vừa xong') : '---'
       }
     ];
   };
 
   if (activeView === 'timeline' && selectedProduct) {
-    return (
-      <div className="min-h-screen bg-[#FDF8F5] animate-in slide-in-from-right duration-500">
-        <div className="p-6 border-b border-slate-100 flex items-center gap-4 bg-white">
-          <button onClick={() => setActiveView('records')} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
-            <ArrowLeft size={24} />
-          </button>
-          <h1 className="text-xl font-black text-slate-800">Quá trình xử lý hồ sơ</h1>
-        </div>
-
-        <div className="p-8 max-w-4xl mx-auto space-y-10">
-          {/* Farm Profile Card */}
-          <div className="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-slate-100">
-            <div className="flex flex-col md:flex-row md:items-center gap-6 mb-10">
-              <div className="w-20 h-20 bg-[#DCFCE7] rounded-3xl flex items-center justify-center text-[#166534] shrink-0">
-                <Sprout size={40} />
-              </div>
-              <div className="flex-1">
-                <h2 className="text-2xl font-black text-slate-900 mb-1">Nông trại {selectedProduct.name}</h2>
-                <p className="text-slate-500 font-bold mb-3">{selectedProduct.farmerName}</p>
-                <div className="flex flex-wrap gap-2">
-                  {selectedProduct.certificates.map((cert, idx) => (
-                    <span key={idx} className="bg-[#DCFCE7] text-[#166534] px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">
-                      {cert.type}
-                    </span>
-                  ))}
-                  {selectedProduct.certificates.length === 0 && (
-                    <span className="bg-slate-100 text-slate-500 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">
-                      Chưa có chứng chỉ
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InfoItem 
-                icon={<User size={18} />} 
-                label="Người đại diện" 
-                value={selectedProduct.farmerName} 
-              />
-              <InfoItem 
-                icon={<MapPin size={18} />} 
-                label="Vị trí" 
-                value={selectedProduct.location.address} 
-              />
-              <InfoItem 
-                icon={<Maximize2 size={18} />} 
-                label="Diện tích" 
-                value={`${selectedProduct.area} ha`} 
-              />
-              <InfoItem 
-                icon={<Layers size={18} />} 
-                label="Loại đất" 
-                value="Đất phù sa" 
-              />
-              <InfoItem 
-                icon={<QrCode size={18} />} 
-                label="Mã vùng trồng" 
-                value={selectedProduct.regionCode} 
-              />
-              <InfoItem 
-                icon={<History size={18} />} 
-                label="Năm thành lập" 
-                value="2015" 
-              />
-              <InfoItem 
-                icon={<Leaf size={18} />} 
-                label="Cây trồng chính" 
-                value={`${selectedProduct.name}, ${selectedProduct.variety}`} 
-              />
-            </div>
-          </div>
-
-          <div className="bg-white rounded-[2.5rem] p-10 border-2 border-slate-100">
-            <div className="mb-10">
-              <p className="text-lg font-black text-slate-900">Mã hồ sơ: <span className="font-mono text-slate-600 italic">{selectedProduct.id}</span></p>
-            </div>
-            
-            <div className="relative space-y-12">
-              {/* Vertical Line */}
-              <div className="absolute left-[87px] top-2 bottom-2 w-0.5 bg-slate-200"></div>
-
-              {/* Timeline Items - Ordered by progress (newest at top) */}
-              {[
-                { status: ProductStatus.REJECTED, label: 'Từ chối', icon: <AlertCircle size={20} /> },
-                { status: ProductStatus.APPROVED, label: 'Đã cấp mã PUC', icon: <CheckCircle2 size={20} /> },
-                { status: ProductStatus.COMPLETED, label: 'Xét duyệt xong', icon: null },
-                { status: ProductStatus.REVIEWING, label: 'Đang duyệt', icon: null },
-                { status: ProductStatus.PENDING, label: 'Chờ xét duyệt', icon: null },
-                { status: ProductStatus.NEW, label: 'Mới đăng ký', icon: null },
-              ].filter(step => {
-                // Only show rejected if it is rejected
-                if (step.status === ProductStatus.REJECTED) return selectedProduct.status === ProductStatus.REJECTED;
-                // Only show approved if it is approved
-                if (step.status === ProductStatus.APPROVED) return selectedProduct.status === ProductStatus.APPROVED;
-                // Only show completed if it has been reached
-                if (step.status === ProductStatus.COMPLETED) return selectedProduct.statusHistory?.some(h => h.status === ProductStatus.COMPLETED);
-                return true;
-              }).map((step, index) => {
-                const historyItem = selectedProduct.statusHistory?.find(h => h.status === step.status);
-                const isCurrent = selectedProduct.status === step.status;
-                const isPast = selectedProduct.statusHistory?.some(h => h.status === step.status);
-                
-                const date = historyItem ? new Date(historyItem.timestamp) : null;
-                const displayDate = date ? `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}` : '';
-                const displayTime = date ? date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : '';
-
-                return (
-                  <div key={index} className="flex items-start gap-8 relative z-10">
-                    {/* Time Column */}
-                    <div className="w-16 text-right shrink-0 pt-1">
-                      <p className="text-sm font-bold text-slate-400 leading-none">{displayDate}</p>
-                      <p className="text-sm font-bold text-slate-400 mt-1">{displayTime}</p>
-                    </div>
-
-                    {/* Circle Column */}
-                    <div className="relative flex items-center justify-center w-10 h-10 shrink-0">
-                      <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${
-                        isCurrent ? (step.status === ProductStatus.REJECTED ? 'bg-red-600 border-red-600 animate-pulse' : 'bg-orange-500 border-orange-500 animate-pulse') : 
-                        isPast ? 'bg-green-600 border-green-600' : 'bg-slate-400 border-slate-400'
-                      }`}>
-                        {step.icon && <div className="text-white">{step.icon}</div>}
-                      </div>
-                    </div>
-
-                    {/* Label Column */}
-                    <div className="pt-1">
-                      <p className={`text-lg font-black ${
-                        isCurrent ? (step.status === ProductStatus.REJECTED ? 'text-red-600' : 'text-orange-600') : 
-                        isPast ? 'text-slate-900' : 'text-slate-400'
-                      }`}>
-                        {step.label}
-                        {step.status === ProductStatus.REJECTED && selectedProduct.rejectionReason && (
-                          <span className="block text-sm font-bold text-red-500 mt-1 italic">Lý do: {selectedProduct.rejectionReason}</span>
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <FarmProductDetail product={selectedProduct} onBack={() => setActiveView('records')} />;
   }
 
   if (activeView === 'records') {
@@ -270,29 +128,22 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPorta
                     <div className="flex items-center gap-3 mb-1">
                       <h3 className="text-2xl font-black text-black uppercase tracking-tighter">{product.name}</h3>
                       <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                        product.status === ProductStatus.APPROVED ? 'bg-green-100 text-green-700 border border-green-200' : 
+                        product.status === ProductStatus.COMPLETED ? 'bg-green-100 text-green-700 border border-green-200' : 
                         product.status === ProductStatus.REJECTED ? 'bg-red-100 text-red-700 border border-red-200' : 
                         product.status === ProductStatus.REVIEWING ? 'bg-blue-100 text-blue-700 border border-blue-200' :
                         product.status === ProductStatus.PENDING ? 'bg-orange-100 text-orange-700 border border-orange-200' : 
-                        product.status === ProductStatus.COMPLETED ? 'bg-purple-100 text-purple-700 border border-purple-200' :
                         'bg-slate-100 text-slate-700 border border-slate-200'
                       }`}>
                         {product.status === ProductStatus.NEW ? 'MỚI ĐĂNG KÝ' :
                          product.status === ProductStatus.PENDING ? 'CHỜ XÉT DUYỆT' : 
                          product.status === ProductStatus.REVIEWING ? 'ĐANG DUYỆT' : 
                          product.status === ProductStatus.COMPLETED ? 'XÉT DUYỆT XONG' :
-                         product.status === ProductStatus.APPROVED ? 'ĐÃ CẤP MÃ PUC' : 
                          product.status === ProductStatus.REJECTED ? 'TỪ CHỐI' : product.status}
                       </div>
                     </div>
                     <p className="text-slate-500 font-bold flex items-center gap-2 uppercase text-xs tracking-widest">
                       <MapPin size={14} /> {product.location.address} • {product.area} HA
                     </p>
-                    {product.regionCode && (
-                      <div className="mt-2 inline-block bg-slate-50 px-3 py-1 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                        Mã PUC: {product.regionCode}
-                      </div>
-                    )}
                   </div>
                 </div>
                 
@@ -428,17 +279,5 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPorta
     </div>
   );
 };
-
-const InfoItem = ({ icon, label, value }: { icon: React.ReactNode, label: string, value: string }) => (
-  <div className="bg-[#F8FBF9] p-4 rounded-2xl flex items-center gap-4 border border-slate-50">
-    <div className="text-green-600 shrink-0">
-      {icon}
-    </div>
-    <div>
-      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{label}</p>
-      <p className="text-sm font-black text-slate-800">{value}</p>
-    </div>
-  </div>
-);
 
 export default FarmerDashboard;

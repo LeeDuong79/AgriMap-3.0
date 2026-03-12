@@ -38,7 +38,7 @@ const App: React.FC = () => {
                           p.regionCode.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = categoryFilter === 'All' || p.category === categoryFilter;
       const isAdminView = user?.role === UserRole.ADMIN;
-      const isApproved = p.status === ProductStatus.APPROVED;
+      const isApproved = p.status === ProductStatus.COMPLETED;
       return matchesSearch && matchesCategory && (isAdminView || isApproved);
     });
   }, [products, searchQuery, categoryFilter, user]);
@@ -55,21 +55,18 @@ const App: React.FC = () => {
       const now = new Date().toISOString();
       const newHistory = [...(p.statusHistory || [])];
 
-      // If moving to APPROVED or REJECTED, add COMPLETED first if not already there
-      if ((status === ProductStatus.APPROVED || status === ProductStatus.REJECTED) && 
-          !newHistory.some(h => h.status === ProductStatus.COMPLETED)) {
-        newHistory.push({ status: ProductStatus.COMPLETED, timestamp: now, note: 'Hệ thống tự động hoàn tất xét duyệt' });
+      // Add to history if not already there for this status
+      if (!newHistory.some(h => h.status === status)) {
+        newHistory.push({ status, timestamp: now, note });
       }
-
-      newHistory.push({ status, timestamp: now, note });
 
       return { 
         ...p, 
         status, 
         statusHistory: newHistory,
-        verificationNote: note,
+        verificationNote: note || p.verificationNote,
         verifiedAt: now,
-        verifiedBy: user?.role === UserRole.ADMIN ? user.fullName : undefined
+        verifiedBy: user?.role === UserRole.ADMIN ? user.fullName : p.verifiedBy
       };
     }));
   };
@@ -108,8 +105,10 @@ const App: React.FC = () => {
             <div className="flex-1 overflow-y-auto">
               {farmerTab === 'home' && (
                 <FarmerDashboard 
+                  key="home"
                   products={products.filter(p => p.farmerId === user.id || p.farmerId === 'f_current')} 
                   onViewPortal={() => setFarmerTab('register')} 
+                  initialView="dashboard"
                 />
               )}
               {farmerTab === 'register' && (
@@ -120,10 +119,11 @@ const App: React.FC = () => {
                 />
               )}
               {farmerTab === 'list' && (
-                <FarmerPortal 
-                  onAdd={handleAddProduct} 
-                  existingProducts={products.filter(p => p.farmerId === 'f_current' || p.farmerId === user.id)}
-                  activeView="my-farms"
+                <FarmerDashboard 
+                  key="list"
+                  products={products.filter(p => p.farmerId === user.id || p.farmerId === 'f_current')} 
+                  onViewPortal={() => setFarmerTab('register')} 
+                  initialView="records"
                 />
               )}
               {farmerTab === 'map' && (
@@ -159,7 +159,7 @@ const App: React.FC = () => {
                 active={farmerTab === 'list'} 
                 onClick={() => setFarmerTab('list')} 
                 icon={<LayoutGrid size={24} />} 
-                label="HỒ SƠ" 
+                label="HỒ SƠ CỦA TÔI" 
               />
               <BottomNavItem 
                 active={farmerTab === 'map'} 

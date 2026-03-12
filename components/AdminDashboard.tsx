@@ -60,7 +60,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, onUpdateStatu
   const stats = useMemo(() => ({
     totalProducts: products.length,
     totalArea: products.reduce((acc, p) => acc + (p.area || 0), 0).toFixed(1),
-    approvedCount: products.filter(p => p.status === ProductStatus.APPROVED).length,
+    approvedCount: products.filter(p => p.status === ProductStatus.COMPLETED).length,
     pendingCount: products.filter(p => p.status === ProductStatus.PENDING).length,
     totalYield: products.reduce((acc, p) => acc + (p.expectedYield || 0), 0),
     totalCerts: products.reduce((acc, p) => acc + p.certificates.length, 0),
@@ -214,10 +214,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, onUpdateStatu
                             </div>
                           </div>
                           <div>
-                            <p className="text-[10px] font-black text-slate-400 uppercase italic">Mã số vùng trồng đăng ký (PUC)</p>
-                            <p className="text-2xl font-black text-green-800 font-mono border-b-2 border-green-200 pb-2">{selectedProduct.regionCode}</p>
-                          </div>
-                          <div>
                             <p className="text-[10px] font-black text-slate-400 uppercase italic">Số điện thoại liên hệ</p>
                             <p className="text-xl font-black text-black flex items-center gap-2">
                               <Phone size={18} className="text-green-700" />
@@ -296,26 +292,26 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, onUpdateStatu
                             />
                           </div>
                           
-                          <div className="flex gap-4">
+                          <div className="flex flex-wrap gap-4">
                             {selectedProduct.status === ProductStatus.PENDING && (
                               <button 
                                 onClick={() => handleAction(ProductStatus.REVIEWING)}
-                                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-xl hover:-translate-y-1 transition-all border-b-4 border-blue-800"
+                                className="flex-1 min-w-[200px] bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-xl hover:-translate-y-1 transition-all border-b-4 border-blue-800"
                               >
                                 <Activity size={24} /> BẮT ĐẦU DUYỆT
                               </button>
                             )}
-                            {(selectedProduct.status === ProductStatus.PENDING || selectedProduct.status === ProductStatus.REVIEWING) && (
+                            {selectedProduct.status === ProductStatus.REVIEWING && (
                               <>
                                 <button 
-                                  onClick={() => handleAction(ProductStatus.APPROVED)}
-                                  className="flex-1 bg-green-700 hover:bg-green-800 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-xl hover:-translate-y-1 transition-all border-b-4 border-green-900"
+                                  onClick={() => handleAction(ProductStatus.COMPLETED)}
+                                  className="flex-1 min-w-[200px] bg-green-700 hover:bg-green-800 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-xl hover:-translate-y-1 transition-all border-b-4 border-green-900"
                                 >
-                                  <CheckCircle2 size={24} /> DUYỆT CẤP MÃ
+                                  <CheckCircle2 size={24} /> HOÀN TẤT XÉT DUYỆT
                                 </button>
                                 <button 
                                   onClick={() => handleAction(ProductStatus.REJECTED)}
-                                  className="flex-1 bg-red-700 hover:bg-red-800 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-xl hover:-translate-y-1 transition-all border-b-4 border-red-900"
+                                  className="flex-1 min-w-[200px] bg-red-700 hover:bg-red-800 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-xl hover:-translate-y-1 transition-all border-b-4 border-red-900"
                                 >
                                   <XCircle size={24} /> TỪ CHỐI
                                 </button>
@@ -424,7 +420,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, onUpdateStatu
                   <thead>
                     <tr className="bg-slate-100 border-b-2 border-slate-200">
                       <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 min-w-[200px]">Nhà vườn & Sản phẩm</th>
-                      <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500">Mã PUC Hệ thống</th>
                       <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500">Địa phương</th>
                       <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">Diện tích</th>
                       <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-500">Trạng thái</th>
@@ -439,13 +434,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, onUpdateStatu
                            <p className="text-[10px] font-bold text-green-700 mt-1 uppercase">Vùng trồng: {p.name}</p>
                         </td>
                         <td className="px-8 py-6">
-                           <div className="flex">
-                             <span className="font-mono text-xs font-black bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 whitespace-nowrap inline-block text-black shadow-sm">
-                               {p.regionCode}
-                             </span>
-                           </div>
-                        </td>
-                        <td className="px-8 py-6">
                            <div className="flex items-center gap-2 text-sm font-bold text-slate-700">
                               <MapPin size={14} className="text-red-600" /> {p.location.address}
                            </div>
@@ -456,8 +444,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, onUpdateStatu
                         <td className="px-8 py-6">
                            <div className="flex items-center gap-2">
                              <div className={`w-2.5 h-2.5 rounded-full ${
-                               p.status === ProductStatus.APPROVED ? 'bg-green-600 shadow-[0_0_8px_rgba(22,163,74,0.5)]' : 
-                               p.status === ProductStatus.PENDING ? 'bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.5)]' : 'bg-red-600'
+                               p.status === ProductStatus.COMPLETED ? 'bg-green-600 shadow-[0_0_8px_rgba(22,163,74,0.5)]' : 
+                               p.status === ProductStatus.PENDING ? 'bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.5)]' : 
+                               p.status === ProductStatus.REVIEWING ? 'bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.5)]' : 'bg-red-600'
                              }`} />
                              <span className="text-xs font-black text-black uppercase tracking-tighter whitespace-nowrap">{p.status}</span>
                            </div>

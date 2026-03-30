@@ -289,7 +289,16 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
                        <input type="password" className="w-full bg-slate-50 border-2 border-slate-300 p-4 pl-12 rounded-2xl font-bold focus:border-black outline-none" placeholder="••••••••" />
                     </div>
                   </div>
-                  <button onClick={() => onLogin({id: 'f1', role: UserRole.FARMER} as any)} className="w-full py-5 bg-green-700 text-white font-black text-xl rounded-2xl shadow-xl hover:bg-green-800 transition-all">
+                  <button onClick={() => onLogin({
+                    id: 'F-DEMO', 
+                    role: UserRole.FARMER,
+                    farmName: 'Nông trại Xanh Bến Tre',
+                    representative: 'Nguyễn Văn An',
+                    cccd: '012345678901',
+                    phone: '0912345678',
+                    address: { province: 'Bến Tre', district: 'Châu Thành', commune: 'Quới Sơn', detail: 'Ấp 1' },
+                    location: { lat: 10.2435, lng: 106.3756 }
+                  } as any)} className="w-full py-5 bg-green-700 text-white font-black text-xl rounded-2xl shadow-xl hover:bg-green-800 transition-all">
                     ĐĂNG NHẬP NGAY
                   </button>
                 </div>

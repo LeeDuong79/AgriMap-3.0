@@ -45,11 +45,11 @@ const FarmerHome: React.FC<FarmerHomeProps> = ({ onNavigate, onOpenWeather, farm
       <div className="mt-16 px-6 grid grid-cols-3 gap-y-10 gap-x-4">
         {[
           { label: 'Đăng ký', icon: <PlusSquareIcon />, color: 'bg-green-100 text-green-700', tab: 'register' },
-          { label: 'Sổ tay kiến thức', icon: <NotebookPen size={28} />, color: 'bg-orange-100 text-orange-700', tab: 'knowledge' },
+          { label: 'Nhật ký canh tác', icon: <BookOpen size={28} />, color: 'bg-blue-100 text-blue-700', tab: 'diary' },
           { label: 'Bản đồ nhiệt', icon: <Thermometer size={28} />, color: 'bg-red-100 text-red-700', tab: 'heatmap' },
           { label: 'Hồ sơ', icon: <LayoutGrid size={28} />, color: 'bg-emerald-100 text-emerald-700', tab: 'list' },
-          { label: 'Thời tiết nông vụ', icon: <CloudSun size={28} />, color: 'bg-blue-100 text-blue-700', action: onOpenWeather },
-          { label: 'Hỗ trợ Nông nghiệp', icon: <BookOpen size={28} />, color: 'bg-purple-100 text-purple-700' },
+          { label: 'Thời tiết nông vụ', icon: <CloudSun size={28} />, color: 'bg-orange-100 text-orange-700', action: onOpenWeather },
+          { label: 'Sổ tay kiến thức', icon: <NotebookPen size={28} />, color: 'bg-purple-100 text-purple-700', tab: 'knowledge' },
         ].map((item, i) => (
           <button 
             key={i} 

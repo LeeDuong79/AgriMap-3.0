@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { FarmProduct, ProductStatus } from '../types';
+import { FarmProduct, ProductStatus, FarmerUser } from '../types';
 import { 
   Sprout, CheckCircle2, Clock, MapPin, 
   ClipboardCheck, Search, ChevronDown, 
@@ -9,23 +9,26 @@ import {
   LayoutDashboard, BookOpen, ShoppingBag, Zap,
   ShoppingCart, Package, GraduationCap, AlertTriangle,
   Landmark, Bell, User, Sun, Cloud, Thermometer,
-  ArrowLeft, Layers, Map as MapIconLucide
+  ArrowLeft, Layers, Map as MapIconLucide, NotebookPen
 } from 'lucide-react';
 
 import FarmProductDetail from './FarmProductDetail';
+import AIDiagnosis from './AIDiagnosis';
 
 interface FarmerDashboardProps {
+  user: FarmerUser;
   products: FarmProduct[];
   onViewPortal: () => void;
+  onNavigate?: (tab: any) => void;
   initialView?: 'dashboard' | 'records' | 'timeline';
 }
 
-const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPortal, initialView = 'dashboard' }) => {
-  const [activeView, setActiveView] = useState<'dashboard' | 'records' | 'timeline'>(initialView);
+const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ user, products, onViewPortal, onNavigate, initialView = 'dashboard' }) => {
+  const [activeView, setActiveView] = useState<'dashboard' | 'records' | 'timeline' | 'ai'>(initialView);
   const [selectedProduct, setSelectedProduct] = useState<FarmProduct | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(products[0]?.id || null);
 
-  const farmerName = "Nguyễn Văn An";
+  const farmerName = user.representative;
   const totalArea = "2.5 ha";
   const currentDate = "Thứ Hai, 14/07/2025";
   const weatherInfo = "28°C, có mây";
@@ -39,12 +42,10 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPorta
 
   const menuItems = [
     { id: 'records', label: 'Hồ sơ', icon: <Layers />, color: 'bg-[#10B981]', onClick: () => setActiveView('records') },
-    { id: 'diary', label: 'Nhật ký canh tác', icon: <BookOpen />, color: 'bg-[#10B981]' },
-    { id: 'market', label: 'Sàn nông sản', icon: <ShoppingBag />, color: 'bg-[#06B6D4]' },
-    { id: 'ai', label: 'AI Chẩn đoán', icon: <Zap />, color: 'bg-[#84CC16]' },
+    { id: 'ai', label: 'AI Chẩn đoán', icon: <Zap />, color: 'bg-[#84CC16]', onClick: () => setActiveView('ai') },
     { id: 'orders', label: 'Đơn hàng', icon: <ShoppingCart />, color: 'bg-[#15803D]' },
     { id: 'warehouse', label: 'Kho hàng', icon: <Package />, color: 'bg-[#15803D]' },
-    { id: 'learning', label: 'Học tập', icon: <GraduationCap />, color: 'bg-[#0D9488]' },
+    { id: 'learning', label: 'Sổ tay kiến thức', icon: <NotebookPen />, color: 'bg-[#0D9488]', onClick: () => onNavigate?.('knowledge') },
     { id: 'disaster', label: 'Cảnh báo thiên tai', icon: <AlertTriangle />, color: 'bg-[#F97316]', badge: '2' },
     { id: 'policy', label: 'Chính sách hỗ trợ', icon: <Landmark />, color: 'bg-[#3B82F6]', badge: '2' },
   ];
@@ -85,6 +86,10 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPorta
 
   if (activeView === 'timeline' && selectedProduct) {
     return <FarmProductDetail product={selectedProduct} onBack={() => setActiveView('records')} />;
+  }
+
+  if (activeView === 'ai') {
+    return <AIDiagnosis onBack={() => setActiveView('dashboard')} />;
   }
 
   if (activeView === 'records') {
@@ -172,7 +177,7 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPorta
           <div className="bg-green-600 p-1.5 rounded-lg">
             <Sprout className="text-white" size={20} />
           </div>
-          <span className="text-xl font-black text-slate-800 tracking-tighter">AgriLink</span>
+          <span className="text-xl font-black text-slate-800 tracking-tighter">AgriMap</span>
         </div>
         <div className="flex items-center gap-4">
           <button className="p-2 text-slate-400 hover:text-black transition-colors relative">
@@ -246,7 +251,7 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPorta
                 className="flex flex-col items-center gap-4 group"
               >
                 <div className={`w-16 h-16 md:w-20 md:h-20 ${item.color} text-white ${item.id === 'records' ? 'rounded-full' : 'rounded-[1.5rem] md:rounded-[2rem]'} flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 relative`}>
-                  {React.cloneElement(item.icon as React.ReactElement, { size: 32 })}
+                  {React.cloneElement(item.icon as React.ReactElement<any>, { size: 32 })}
                   {item.badge && (
                     <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black w-6 h-6 rounded-full border-2 border-white flex items-center justify-center shadow-md">
                       {item.badge}
@@ -259,7 +264,7 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ products, onViewPorta
               </button>
             ))}
             
-            {/* Registration Button (AgriLink Style from Image 2) */}
+            {/* Registration Button (AgriMap Style from Image 2) */}
             <button 
               onClick={onViewPortal}
               className="flex flex-col items-center gap-4 group"

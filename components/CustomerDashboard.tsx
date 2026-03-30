@@ -77,7 +77,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, products, o
           <div className="bg-green-700 text-white p-2 rounded-xl">
             <Network size={24} />
           </div>
-          <h1 className="text-2xl font-black tracking-tighter uppercase">AgriLink</h1>
+          <h1 className="text-2xl font-black tracking-tighter uppercase">AgriMap</h1>
         </div>
         <div className="flex items-center gap-6">
           <button className="relative p-2 text-slate-400 hover:text-black transition-colors">

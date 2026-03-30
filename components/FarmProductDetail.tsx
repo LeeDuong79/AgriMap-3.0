@@ -22,7 +22,7 @@ const FarmProductDetail: React.FC<FarmProductDetailProps> = ({ product, onBack }
         <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
           <ArrowLeft size={24} />
         </button>
-        <h1 className="text-xl font-black text-slate-800">Chi tiết hồ sơ nông sản</h1>
+        <h1 className="text-xl font-black text-slate-800 font-display">Chi tiết hồ sơ nông sản</h1>
       </div>
 
       <div className="p-8 max-w-4xl mx-auto space-y-10 pb-24">
@@ -33,7 +33,7 @@ const FarmProductDetail: React.FC<FarmProductDetailProps> = ({ product, onBack }
               <Sprout size={40} />
             </div>
             <div className="flex-1">
-              <h2 className="text-2xl font-black text-slate-900 mb-1">Nông trại {product.name}</h2>
+              <h2 className="text-2xl font-black text-slate-900 mb-1 font-display">Nông trại {product.name}</h2>
               <p className="text-slate-500 font-bold mb-3">{product.farmerName}</p>
               <div className="flex flex-wrap gap-2">
                 {product.certificates.map((cert, idx) => (
@@ -93,7 +93,7 @@ const FarmProductDetail: React.FC<FarmProductDetailProps> = ({ product, onBack }
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-8">
             <section className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm">
-              <h3 className="text-lg font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-3">
+              <h3 className="text-lg font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-3 font-display">
                 <BookOpen size={20} className="text-green-600" />
                 Quy trình canh tác
               </h3>
@@ -103,7 +103,7 @@ const FarmProductDetail: React.FC<FarmProductDetailProps> = ({ product, onBack }
             </section>
 
             <section className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm">
-              <h3 className="text-lg font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-3">
+              <h3 className="text-lg font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-3 font-display">
                 <ShieldCheck size={20} className="text-blue-600" />
                 Chứng chỉ đã cấp
               </h3>
@@ -130,7 +130,7 @@ const FarmProductDetail: React.FC<FarmProductDetailProps> = ({ product, onBack }
 
           <div className="space-y-8">
             <section className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm">
-              <h3 className="text-lg font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-3">
+              <h3 className="text-lg font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-3 font-display">
                 <Bell size={20} className="text-orange-600" />
                 Phản hồi từ Cán bộ
               </h3>
@@ -147,7 +147,7 @@ const FarmProductDetail: React.FC<FarmProductDetailProps> = ({ product, onBack }
             </section>
 
             <section className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm">
-              <h3 className="text-lg font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-3">
+              <h3 className="text-lg font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-3 font-display">
                 <Maximize2 size={20} className="text-purple-600" />
                 Hình ảnh minh chứng
               </h3>

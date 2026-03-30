@@ -136,7 +136,7 @@ const FarmerPortal: React.FC<FarmerPortalProps> = ({ onAdd, existingProducts, ac
               <ClipboardList size={32} />
             </div>
           )}
-          <h1 className="text-5xl font-black text-black tracking-tighter uppercase">
+          <h1 className="text-5xl font-black text-black tracking-tighter uppercase font-display">
             {activeView === 'register' ? 'Đăng ký Vùng trồng mới' : 'Hồ sơ của tôi'}
           </h1>
         </div>
@@ -151,7 +151,7 @@ const FarmerPortal: React.FC<FarmerPortalProps> = ({ onAdd, existingProducts, ac
         <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-in fade-in duration-500">
           <div className="lg:col-span-7 space-y-8">
             <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border-2 border-slate-200">
-              <div className="flex items-center gap-3 mb-8 text-black font-black text-2xl border-b-4 border-green-700 pb-4">
+              <div className="flex items-center gap-3 mb-8 text-black font-black text-2xl border-b-4 border-green-700 pb-4 font-display">
                 <Info size={28} className="text-green-700" />
                 <span className="uppercase tracking-tighter">Thông tin Vùng trồng</span>
               </div>
@@ -186,7 +186,7 @@ const FarmerPortal: React.FC<FarmerPortalProps> = ({ onAdd, existingProducts, ac
               </div>
 
               <div className="mt-12">
-                <label className="block text-xl font-black text-black mb-6 flex items-center gap-3">
+                <label className="block text-xl font-black text-black mb-6 flex items-center gap-3 font-display">
                   <Calendar size={24} className="text-green-700" />
                   THÁNG THU HOẠCH CHÍNH VỤ *
                 </label>
@@ -208,7 +208,7 @@ const FarmerPortal: React.FC<FarmerPortalProps> = ({ onAdd, existingProducts, ac
 
           <div className="lg:col-span-5 space-y-8">
             <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border-2 border-slate-200">
-              <div className="flex items-center gap-3 mb-8 text-black font-black text-2xl border-b-4 border-green-700 pb-4">
+              <div className="flex items-center gap-3 mb-8 text-black font-black text-2xl border-b-4 border-green-700 pb-4 font-display">
                 <ShieldCheck size={28} className="text-green-700" />
                 <span className="uppercase tracking-tighter">Định danh & Minh chứng</span>
               </div>
@@ -294,7 +294,7 @@ const FarmerPortal: React.FC<FarmerPortalProps> = ({ onAdd, existingProducts, ac
                       </div>
                       <div>
                         <div className="flex items-center gap-3 mb-1">
-                          <h4 className="text-3xl font-black text-black uppercase tracking-tighter">{p.name}</h4>
+                          <h4 className="text-3xl font-black text-black uppercase tracking-tighter font-display">{p.name}</h4>
                           <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase border-2 ${
                             p.status === ProductStatus.COMPLETED ? 'bg-green-500 text-white border-green-800 shadow-sm' : 'bg-orange-400 text-black border-orange-600 shadow-sm'
                           }`}>

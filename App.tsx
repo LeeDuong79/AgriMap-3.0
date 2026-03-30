@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { UserRole, FarmProduct, ProductStatus, User, AdminUser, AdminLevel, BuyerUser } from './types';
+import { UserRole, FarmProduct, ProductStatus, User, AdminUser, AdminLevel, BuyerUser, FarmerUser } from './types';
 import { MOCK_PRODUCTS } from './constants';
 import FarmerDashboard from './components/FarmerDashboard';
 import Navbar from './components/Navbar';
@@ -71,6 +71,10 @@ const App: React.FC = () => {
     }));
   };
 
+  const handleUpdateUser = (updatedUser: User) => {
+    setUser(updatedUser);
+  };
+
   const handleAuthSuccess = (loggedUser: User) => {
     setUser(loggedUser);
     setCurrentRole(loggedUser?.role || UserRole.BUYER);
@@ -106,8 +110,10 @@ const App: React.FC = () => {
               {farmerTab === 'home' && (
                 <FarmerDashboard 
                   key="home"
+                  user={user as FarmerUser}
                   products={products.filter(p => p.farmerId === user.id || p.farmerId === 'f_current')} 
                   onViewPortal={() => setFarmerTab('register')} 
+                  onNavigate={(tab) => setFarmerTab(tab)}
                   initialView="dashboard"
                 />
               )}
@@ -121,8 +127,10 @@ const App: React.FC = () => {
               {farmerTab === 'list' && (
                 <FarmerDashboard 
                   key="list"
+                  user={user as FarmerUser}
                   products={products.filter(p => p.farmerId === user.id || p.farmerId === 'f_current')} 
                   onViewPortal={() => setFarmerTab('register')} 
+                  onNavigate={(tab) => setFarmerTab(tab)}
                   initialView="records"
                 />
               )}
@@ -137,7 +145,11 @@ const App: React.FC = () => {
                 </div>
               )}
               {farmerTab === 'profile' && (
-                <FarmerProfile user={user as any} onLogout={handleLogout} />
+                <FarmerProfile 
+                  user={user as any} 
+                  onLogout={handleLogout} 
+                  onUpdateUser={handleUpdateUser}
+                />
               )}
               {farmerTab === 'knowledge' && (
                 <KnowledgeHandbook onBack={() => setFarmerTab('home')} />
@@ -147,7 +159,7 @@ const App: React.FC = () => {
               )}
             </div>
 
-            {/* Bottom Navigation Bar - AgriLink Style */}
+            {/* Bottom Navigation Bar - AgriMap Style */}
             <nav className="bg-white border-t border-slate-100 flex justify-around items-center py-3 px-2 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] z-[2000]">
               <BottomNavItem 
                 active={farmerTab === 'home'} 

@@ -6,9 +6,11 @@ import { User, Phone, Mail, Calendar, Users, LogOut, Save, ShieldCheck } from 'l
 interface FarmerProfileProps {
   user: FarmerUser;
   onLogout: () => void;
+  onUpdateUser: (user: FarmerUser) => void;
 }
 
-const FarmerProfile: React.FC<FarmerProfileProps> = ({ user, onLogout }) => {
+const FarmerProfile: React.FC<FarmerProfileProps> = ({ user, onLogout, onUpdateUser }) => {
+  const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
     fullName: user.representative || '',
     email: `${user.id.toLowerCase()}@agromap.vn`,
@@ -23,6 +25,13 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({ user, onLogout }) => {
   };
 
   const handleSave = () => {
+    const updatedUser: FarmerUser = {
+      ...user,
+      representative: profileData.fullName,
+      phone: profileData.phone,
+    };
+    onUpdateUser(updatedUser);
+    setIsEditing(false);
     alert('Thông tin cá nhân đã được cập nhật thành công!');
   };
 
@@ -42,6 +51,18 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({ user, onLogout }) => {
       </div>
 
       <div className="bg-white rounded-[2.5rem] border-4 border-black p-8 shadow-xl space-y-6">
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-xl font-black text-black uppercase tracking-tighter">Thông tin cá nhân</h2>
+          {!isEditing && (
+            <button 
+              onClick={() => setIsEditing(true)}
+              className="text-green-700 font-black text-sm underline underline-offset-4 uppercase"
+            >
+              Chỉnh sửa
+            </button>
+          )}
+        </div>
+
         <div className="space-y-6">
           {/* Họ và Tên */}
           <div className="space-y-2">
@@ -51,9 +72,10 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({ user, onLogout }) => {
             <input
               type="text"
               name="fullName"
+              disabled={!isEditing}
               value={profileData.fullName}
               onChange={handleChange}
-              className="w-full bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl font-bold text-black focus:border-black outline-none transition-all"
+              className={`w-full bg-slate-50 border-2 ${isEditing ? 'border-green-600' : 'border-slate-200'} p-4 rounded-2xl font-bold text-black focus:border-black outline-none transition-all`}
               placeholder="Nhập họ và tên..."
             />
           </div>
@@ -66,9 +88,10 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({ user, onLogout }) => {
             <input
               type="email"
               name="email"
+              disabled={!isEditing}
               value={profileData.email}
               onChange={handleChange}
-              className="w-full bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl font-bold text-black focus:border-black outline-none transition-all"
+              className={`w-full bg-slate-50 border-2 ${isEditing ? 'border-green-600' : 'border-slate-200'} p-4 rounded-2xl font-bold text-black focus:border-black outline-none transition-all`}
               placeholder="example@agromap.vn"
             />
           </div>
@@ -81,9 +104,10 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({ user, onLogout }) => {
             <input
               type="tel"
               name="phone"
+              disabled={!isEditing}
               value={profileData.phone}
               onChange={handleChange}
-              className="w-full bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl font-bold text-black focus:border-black outline-none transition-all"
+              className={`w-full bg-slate-50 border-2 ${isEditing ? 'border-green-600' : 'border-slate-200'} p-4 rounded-2xl font-bold text-black focus:border-black outline-none transition-all`}
               placeholder="09xxx..."
             />
           </div>
@@ -97,9 +121,10 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({ user, onLogout }) => {
               <input
                 type="date"
                 name="dob"
+                disabled={!isEditing}
                 value={profileData.dob}
                 onChange={handleChange}
-                className="w-full bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl font-bold text-black focus:border-black outline-none transition-all"
+                className={`w-full bg-slate-50 border-2 ${isEditing ? 'border-green-600' : 'border-slate-200'} p-4 rounded-2xl font-bold text-black focus:border-black outline-none transition-all`}
               />
             </div>
 
@@ -110,9 +135,10 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({ user, onLogout }) => {
               </label>
               <select
                 name="gender"
+                disabled={!isEditing}
                 value={profileData.gender}
                 onChange={handleChange}
-                className="w-full bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl font-bold text-black focus:border-black outline-none transition-all appearance-none"
+                className={`w-full bg-slate-50 border-2 ${isEditing ? 'border-green-600' : 'border-slate-200'} p-4 rounded-2xl font-bold text-black focus:border-black outline-none transition-all appearance-none`}
               >
                 <option value="Nam">Nam</option>
                 <option value="Nữ">Nữ</option>
@@ -122,12 +148,22 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({ user, onLogout }) => {
           </div>
         </div>
 
-        <button
-          onClick={handleSave}
-          className="w-full bg-green-700 text-white py-5 rounded-2xl font-black text-lg uppercase shadow-xl hover:bg-green-800 transition-all flex items-center justify-center gap-3 border-b-4 border-green-900 active:border-b-0 active:translate-y-1"
-        >
-          <Save size={24} /> LƯU THÔNG TIN
-        </button>
+        {isEditing && (
+          <div className="flex gap-4">
+            <button
+              onClick={() => setIsEditing(false)}
+              className="flex-1 bg-slate-100 text-slate-600 py-5 rounded-2xl font-black text-lg uppercase transition-all border-b-4 border-slate-300 active:border-b-0 active:translate-y-1"
+            >
+              HỦY
+            </button>
+            <button
+              onClick={handleSave}
+              className="flex-[2] bg-green-700 text-white py-5 rounded-2xl font-black text-lg uppercase shadow-xl hover:bg-green-800 transition-all flex items-center justify-center gap-3 border-b-4 border-green-900 active:border-b-0 active:translate-y-1"
+            >
+              <Save size={24} /> LƯU THÔNG TIN
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="space-y-4">
